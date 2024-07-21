@@ -1,8 +1,9 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import ContentHtml from '../../stories/components/contentHtml';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import Indicator from '../../../components/indicator';
 import { getStory } from '../../../services/api';
 import { Story } from '../../../types/story';
+import ContentHtml from '../../stories/components/contentHtml';
 import CommentList from './commentList';
 
 const CommentItem = ({ comment, isReply }: {comment: Story, isReply: boolean}) => {
@@ -28,7 +29,7 @@ const CommentItem = ({ comment, isReply }: {comment: Story, isReply: boolean}) =
     }
   
     if (loading && isReply) {
-      return <ActivityIndicator size="small" color="#4267B2" />;
+      return <Indicator size='small' />
     }
   
     return (

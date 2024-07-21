@@ -1,10 +1,11 @@
 import React from 'react'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import Indicator from '../../../components/indicator'
 
 const FooterComponent = () => {
     return (
         <View style={styles.container}>
-            <ActivityIndicator size='small' color='#2196f3' />
+            <Indicator size="small" />
         </View>
     )
 }

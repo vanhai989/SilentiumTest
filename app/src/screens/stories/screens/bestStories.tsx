@@ -1,16 +1,17 @@
-import React, { memo, useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import React, { memo, useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { NavProps } from '..';
+import Indicator from '../../../components/indicator';
+import * as api from '../../../services/api';
 import { StoriesType, Story, StoryCategory } from '../../../types/story';
 import StoriesList from '../components/storiesList';
-import * as api from '../../../services/api'
+import { LimitStories } from '../../../utils/constants';
 
 const initNewStories: StoryCategory = {
     init: true,
     page: 1,
     stories: []
 }
-let limit = 30
 
 const NewStories = ({ navigation }: { navigation: NavProps }) => {
     const [newStories, setNewStories] = useState(initNewStories)
@@ -18,12 +19,10 @@ const NewStories = ({ navigation }: { navigation: NavProps }) => {
     const [refreshing, setRefreshing] = useState(false)
 
     useEffect(() => {
-        getStories('best', 1, 30)
-
+        getStories('best', 1, LimitStories)
     }, [])
-    
 
-    const getStories = async (type: StoriesType, page: number = 1, limit: number = 30) => {
+    const getStories = async (type: StoriesType, page: number = 1, limit: number = LimitStories) => {
         setLoading(true)
         const res = await api.getStories(type, page, limit)
         setNewStories(pre => {
@@ -34,15 +33,14 @@ const NewStories = ({ navigation }: { navigation: NavProps }) => {
             }
         })
         setLoading(false)
-        if(refreshing) {
+        if (refreshing) {
             setRefreshing(false)
         }
     }
 
     const loadMore = () => {
         const newPage = newStories.page + 1
-        console.log('newPage best', newPage);
-        getStories('best', newPage, limit)
+        getStories('best', newPage)
     }
 
     const onRefresh = () => {
@@ -52,25 +50,26 @@ const NewStories = ({ navigation }: { navigation: NavProps }) => {
             page: 1,
             stories: []
         })
-        getStories('new', 1, limit)
+        getStories('new', 1)
     }
 
     const handleOnPress = (item: Story) => {
-        navigation.navigate('StoryDetail', {story: item})
+        navigation.navigate('StoryDetail', { story: item })
     }
 
     const renderStoriesList = () => {
-        if(newStories.init && newStories.stories.length == 0 && loading) {
-            return <ActivityIndicator size='large' color='#2196f3' /> 
+        if (newStories.init && newStories.stories.length == 0 && loading) {
+            return <Indicator size='large' />
+
         } else {
-            return <StoriesList 
-                        data={newStories.stories} 
-                        loading={loading} 
-                        loadMore={loadMore} 
-                        onRefresh={onRefresh} 
-                        refreshing={refreshing}
-                        handleOnPress={handleOnPress}
-                        typeStory='best' />
+            return <StoriesList
+                data={newStories.stories}
+                loading={loading}
+                loadMore={loadMore}
+                onRefresh={onRefresh}
+                refreshing={refreshing}
+                handleOnPress={handleOnPress}
+                typeStory='best' />
         }
     }
 

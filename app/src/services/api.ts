@@ -1,25 +1,33 @@
 import { StoriesType, Story } from '../types/story';
-import { fetchFromAPI } from  './baseApi';
 
-const storyCache: { [id: number]: Story } = {};
+import { BASE_URL } from "../utils/constants";
+import fetchWrapper from "./baseApi";
 
-const getStory = async (id: number): Promise<Story> => {
-  // if (storyCache[id]) {
-  //   return storyCache[id];
-  // }
 
-  const story: Story = await fetchFromAPI(`/item/${id}.json`);
-  // storyCache[id] = story;
+let storyIdCache: { [type: string]: number[] } = {};
+
+export const getStoryIds = async (type: StoriesType): Promise<number[]> => {
+  if (!storyIdCache[type]) {
+    storyIdCache[type] = await fetchWrapper.fetch<number[]>(`${BASE_URL}${type}stories.json`);
+  }
+  return storyIdCache[type];
+};
+
+export const getStory = async (id: number): Promise<Story> => {
+  const story = await fetchWrapper.fetch<Story>(`${BASE_URL}item/${id}.json`);
   return story;
 };
 
-const getStories = async (type: StoriesType, page: number = 1, limit: number = 10): Promise<Story[]> => {
-    
-    const storyIds: number[] = await fetchFromAPI(`/${type}stories.json`);
-  const limitedStoryIds = storyIds.slice((page - 1) * limit, page * limit);
+export const getStories = async (
+  type: StoriesType,
+  page: number = 1,
+  limit: number = 20
+): Promise<Story[]> => {
+  const storyIds = await getStoryIds(type);
+  const paginatedIds = storyIds.slice((page - 1) * limit, page * limit);
 
   const stories = await Promise.all(
-    limitedStoryIds.map(async (id) => {
+    paginatedIds.map(async (id) => {
       return getStory(id);
     })
   );
@@ -27,4 +35,3 @@ const getStories = async (type: StoriesType, page: number = 1, limit: number = 1
   return stories;
 };
 
-export {getStories, getStory}

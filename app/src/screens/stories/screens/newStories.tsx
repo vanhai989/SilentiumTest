@@ -1,8 +1,10 @@
 import React, { memo, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavProps } from '..';
+import Indicator from '../../../components/indicator';
 import * as api from '../../../services/api';
 import { StoriesType, Story, StoryCategory } from '../../../types/story';
+import { LimitStories } from '../../../utils/constants';
 import StoriesList from '../components/storiesList';
 
 const initNewStories: StoryCategory = {
@@ -10,20 +12,17 @@ const initNewStories: StoryCategory = {
     page: 1,
     stories: []
 }
-let limit = 30
-
 const NewStories = ({ navigation }: { navigation: NavProps }) => {
     const [newStories, setNewStories] = useState(initNewStories)
     const [loading, setLoading] = useState(false)
     const [refreshing, setRefreshing] = useState(false)
 
     useEffect(() => {
-        getStories('new', 1, 30)
-
+        getStories('new', 1, LimitStories)
     }, [])
     
 
-    const getStories = async (type: StoriesType, page: number = 1, limit: number = 30) => {
+    const getStories = async (type: StoriesType, page: number = 1, limit: number = LimitStories) => {
         setLoading(true)
         const stories = await api.getStories(type, page, limit)
         setNewStories(pre => {
@@ -39,7 +38,7 @@ const NewStories = ({ navigation }: { navigation: NavProps }) => {
 
     const loadMore = () => {
         const newPage = newStories.page + 1
-        getStories('new', newPage, limit)
+        getStories('new', newPage)
     }
 
     const onRefresh = () => {
@@ -49,21 +48,17 @@ const NewStories = ({ navigation }: { navigation: NavProps }) => {
             page: 1,
             stories: []
         })
-        getStories('new', 1, limit)
+        getStories('new', 1)
     }
 
     const handleOnPress = (item: Story) => {
-        console.log('item:', item);
-        
         navigation.navigate('StoryDetail', {story: item})
     }
 
     const renderStoriesList = () => {
-        console.log('refreshing', refreshing);
-        
         const isShowIndicator = (newStories.init && newStories.stories.length == 0 && loading) || refreshing
         if(isShowIndicator) {
-            return <ActivityIndicator size='large' color='#2196f3' /> 
+            return <Indicator size='large' />
         } else {
             return <StoriesList 
                         data={newStories.stories} 

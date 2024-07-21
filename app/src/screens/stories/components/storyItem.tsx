@@ -1,6 +1,5 @@
 import React from 'react';
 import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
 import { Story } from '../../../types/story';
 import { portTimeFormat } from '../../../utils/common';
 import ContentHtml from './contentHtml';
@@ -11,6 +10,7 @@ const StoryItem = ({ item, handleOnPress }: { item: Story, handleOnPress: (item:
     }
 
     const formattedTime = portTimeFormat(item.time)
+
     return (
         <TouchableOpacity onPress={() => handleOnPress(item)} style={styles.itemContainer} key={item.id.toString()}>
             <View style={styles.storyInfo}>
@@ -20,7 +20,7 @@ const StoryItem = ({ item, handleOnPress }: { item: Story, handleOnPress: (item:
             <Text style={styles.title}>{item.title}</Text>
             <ContentHtml content={item.text} />
             {item.url && <TouchableOpacity onPress={_handleLinking}>
-                <Text style={styles.url}>refer to {item.url}</Text>
+                <Text style={styles.url}>Refer to {item.url}</Text>
                 </TouchableOpacity>}
             <View style={styles.details}>
                 <Text style={styles.author}>{item?.kids?.length || 0} Comments</Text>
@@ -67,20 +67,15 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     url: {
-        fontSize: 16,
+        fontSize: 14,
         color: '#1a0dab',
         textDecorationLine: 'underline',
         marginTop: 5,
+        lineHeight: 20
     },
     time: {
         fontSize: 12,
         color: '#777',
         marginLeft: 20
     },
-    webview: {
-        height: 500,
-        width: '100%',
-        marginTop: 10,
-    },
-
 })

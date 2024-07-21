@@ -5,7 +5,7 @@ import { SceneMap, TabView } from 'react-native-tab-view';
 import { RootNavigationParamsList } from '../../navigator';
 import { NavigationStateType } from '../../types/story';
 import { layoutDimension } from '../../utils/common';
-import { TabViewKeys } from '../../utils/constants';
+import { Colors, TabViewKeys } from '../../utils/constants';
 import BestStories from './screens/bestStories';
 import NewStories from './screens/newStories';
 import TopStories from './screens/topStories';
@@ -14,8 +14,8 @@ import TopStories from './screens/topStories';
 export type NavProps = NavigationProp<RootNavigationParamsList, 'Stories'>
 
 const initNavigationState: NavigationStateType[] = [
-    { key: TabViewKeys.best_stories.key, title: TabViewKeys.best_stories.title },
     { key: TabViewKeys.top_stories.key, title: TabViewKeys.top_stories.title },
+    { key: TabViewKeys.best_stories.key, title: TabViewKeys.best_stories.title },
     { key: TabViewKeys.new_stories.key, title: TabViewKeys.new_stories.title },
 ]
 
@@ -32,19 +32,15 @@ const StoriesScreen = () => {
 
     const renderScene = useMemo(() => {
         return SceneMap({
-            [TabViewKeys.best_stories.key]: () => <BestStories navigation={navigation} />,
             [TabViewKeys.top_stories.key]: () => <TopStories navigation={navigation} />,
+            [TabViewKeys.best_stories.key]: () => <BestStories navigation={navigation} />,
             [TabViewKeys.new_stories.key]: () => <NewStories navigation={navigation} />,
         });
     }, [])
 
     return (
         <View style={styles.container}>
-            <View style={{
-                flex: 1,
-                marginTop: 50,
-                backgroundColor: '#fff'
-            }}>
+            <View style={styles.tabViewWrapper}>
                 <TabView
                     lazy={true}
                     navigationState={{ index, routes }}
@@ -63,6 +59,11 @@ export default StoriesScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#2196f3'
+        backgroundColor: Colors.mainColor
+    },
+    tabViewWrapper: {
+        flex: 1,
+        marginTop: 50,
+        backgroundColor: '#fff'
     }
 })

@@ -1,9 +1,10 @@
-import { Dimensions } from "react-native";
 
-export const BASE_URL = 'https://hacker-news.firebaseio.com/v0';
+const BASE_URL = 'https://hacker-news.firebaseio.com/v0/';
+const DetailTitle = 'Story Detail'
+const LimitStories = 20
 
 
-export const TabViewKeys = {
+const TabViewKeys = {
     new_stories: {
         key: 'NEW_STORIES',
         title: 'New stories'
@@ -17,3 +18,11 @@ export const TabViewKeys = {
         title: 'Top stories'
     },
 }
+
+const Colors = {
+    mainColor: '#2196f3',
+    headerColor: '#f1f9ff'
+
+}
+
+export {BASE_URL, TabViewKeys, Colors, DetailTitle, LimitStories}

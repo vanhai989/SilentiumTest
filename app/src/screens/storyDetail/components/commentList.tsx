@@ -1,7 +1,7 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useCallback } from 'react'
-import CommentItem from './comment'
+import { FlatList, StyleSheet } from 'react-native'
 import { Story } from '../../../types/story'
+import CommentItem from './comment'
 
 const CommentList = ({ comments, isReply }: { comments: Story[], isReply: boolean }) => {
 

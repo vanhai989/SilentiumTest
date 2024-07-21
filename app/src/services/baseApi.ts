@@ -1,16 +1,29 @@
-import { BASE_URL } from "../utils/constants";
+class FetchWrapper {
+  private abortController: AbortController;
 
-export const fetchFromAPI = async <T>(endpoint: string): Promise<T> => {
-  try {
-    const url = `${BASE_URL}${endpoint}`
-    console.log('URL:', url);
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Network response was not ok: ${response.statusText}`);
-    }
-    return response.json();
-  } catch (error) {
-    console.error('Fetch error:', error);
-    throw error;
+  constructor() {
+    this.abortController = new AbortController();
   }
-};
+
+  get signal() {
+    return this.abortController.signal;
+  }
+
+  async fetch<T>(url: string): Promise<T> {
+    console.log(`url: ${url}`); 
+    const response = await fetch(url, { signal: this.signal });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data: T = await response.json();
+    return data;
+  }
+
+  abort() {
+    this.abortController.abort();
+    this.abortController = new AbortController();
+  }
+}
+
+const fetchWrapper = new FetchWrapper();
+export default fetchWrapper;

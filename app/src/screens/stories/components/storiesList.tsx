@@ -1,14 +1,9 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useCallback } from 'react'
-import { FlashList } from "@shopify/flash-list";
-import { StoriesType, Story, StoryCategory } from '../../../types/story'
-import { NavProps } from '..';
-import { Routes } from '../../../navigator/routers';
-import RenderHTML from 'react-native-render-html';
-import StoryItem from './storyItem';
+import React, { useCallback } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { StoriesType, Story } from '../../../types/story';
 import FooterComponent from './footerComponent';
+import StoryItem from './storyItem';
 
-const itemHeight = 200
 type props = {
     typeStory: StoriesType,
     data: Story[],

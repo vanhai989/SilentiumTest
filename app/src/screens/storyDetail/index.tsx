@@ -1,14 +1,14 @@
-// src/components/StoryDetailScreen.tsx
-
-import { RouteProp, useRoute } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RouteProp, useFocusEffect, useRoute } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import Indicator from '../../components/indicator';
 import { RootNavigationParamsList } from '../../navigator';
 import { getStory } from '../../services/api';
+import fetchWrapper from '../../services/baseApi';
 import { Story } from '../../types/story';
+import { formatTimeLocale } from '../../utils/common';
 import ContentHtml from '../stories/components/contentHtml';
 import CommentList from './components/commentList';
-import { formatTimeLocale } from '../../utils/common';
 
 type RouteProps = RouteProp<RootNavigationParamsList, 'StoryDetail'>;
 
@@ -17,9 +17,25 @@ const StoryDetailScreen = () => {
   const { story } = route.params;
   const [comments, setComments] = useState<Story[]>([]);
 
-  useEffect(() => {
-    fetchComments();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchStoryDetails = async () => {
+        try {
+          fetchComments();
+        } catch (error: any) {
+          if (error.name !== 'AbortError') {
+            console.error('AbortError');
+          }
+        }
+      };
+
+      fetchStoryDetails();
+
+      return () => {
+        fetchWrapper.abort();
+      };
+    }, [story.id])
+  );
 
   const fetchComments = async () => {
     if (story.kids) {
@@ -40,10 +56,10 @@ const StoryDetailScreen = () => {
       )
 
     } else if (story?.kids?.length || 0 > 0) {
-      commentContent = <ActivityIndicator size="small" color="#4267B2" />
+      commentContent = <Indicator size="small" />
     }
     return (
-      <View>
+      <View style={styles.wrapperComments}>
         <Text style={styles.commentTitle}>Comments:</Text>
         {commentContent}
       </View>
@@ -51,12 +67,14 @@ const StoryDetailScreen = () => {
   }
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={styles.wrapper}>
       <View style={styles.container}>
         <Text style={styles.title}>{story.title}</Text>
         <Text style={styles.detail}>By: {story.by}</Text>
         <Text style={styles.detail}>Score: {story.score}</Text>
-        <Text style={styles.detail}>Time: {formatTimeLocale(story.time)}</Text>
+        <View style={styles.wrapperText}>
+          <Text style={styles.detail}>Date created: {formatTimeLocale(story.time)}</Text>
+        </View>
         <ContentHtml content={story.text} />
         {_renderComment()}
       </View>
@@ -65,9 +83,12 @@ const StoryDetailScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     padding: 15,
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
@@ -106,6 +127,12 @@ const styles = StyleSheet.create({
   repliesContainer: {
     marginTop: 10,
   },
+  wrapperText: {
+    paddingBottom: 10
+  },
+  wrapperComments: {
+    paddingBottom: 50
+  }
 });
 
 export default StoryDetailScreen;
