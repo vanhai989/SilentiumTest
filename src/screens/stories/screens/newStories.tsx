@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { NavProps } from '..';
 import Indicator from '../../../components/indicator';
 import { Routes } from '../../../navigator/routers';
-import * as api from '../../../services/api';
+import * as api from '../../../services/apis';
 import { StoriesType, Story, StoryCategory } from '../../../types/story';
 import { LimitStories } from '../../../utils/constants';
 import StoriesList from '../components/storiesList';

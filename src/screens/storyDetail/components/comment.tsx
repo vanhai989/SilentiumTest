@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Indicator from '../../../components/indicator';
-import { getStory } from '../../../services/api';
+import { getStory } from '../../../services/apis';
 import { Story } from '../../../types/story';
 import ContentHtml from '../../stories/components/contentHtml';
 import CommentList from './commentList';

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Indicator from '../../components/indicator';
 import { RootNavigationParamsList } from '../../navigator';
-import { getStory } from '../../services/api';
+import { getStory } from '../../services/apis';
 import fetchWrapper from '../../services/baseApi';
 import { Story } from '../../types/story';
 import { formatTimeLocale } from '../../utils/common';

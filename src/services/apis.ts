@@ -22,6 +22,8 @@ export const getStories = async (type: StoriesType, page: number = 1, limit: num
   const storyIds = await getStoryIds(type);
   const totalStories = storyIds.length;
   const totalPages = Math.ceil(totalStories / limit);
+  console.log('totalPages', totalPages);
+  
   const paginatedIds = storyIds.slice((page - 1) * limit, page * limit);
   const stories = await Promise.all(
     paginatedIds.map(async (id) => {

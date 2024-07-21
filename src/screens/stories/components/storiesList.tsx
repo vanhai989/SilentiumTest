@@ -39,7 +39,7 @@ const StoriesList = ({ typeStory, data, loading, loadMore, onRefresh, refreshing
                 windowSize={15}
                 removeClippedSubviews={true}
                 onEndReachedThreshold={0.5}
-                ListFooterComponent={loading ? <FooterComponent /> : null}
+                ListFooterComponent={<FooterComponent loading={loading} /> }
             />
         </View>
     )
@@ -49,7 +49,6 @@ export default StoriesList
 
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
-        width: '100%'
+        flex: 1
     },
 })

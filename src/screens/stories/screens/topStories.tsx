@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavProps } from '..';
 import Indicator from '../../../components/indicator';
-import * as api from '../../../services/api';
+import * as api from '../../../services/apis';
 import { StoriesType, Story, StoryCategory } from '../../../types/story';
 import { LimitStories } from '../../../utils/constants';
 import StoriesList from '../components/storiesList';
@@ -36,9 +36,7 @@ const TopStories = ({ navigation }: { navigation: NavProps }) => {
             }
         })
         setLoading(false)
-        if (refreshing) {
-            setRefreshing(false)
-        }
+        setRefreshing(false)
     }
 
     const _loadMore = () => {
@@ -64,7 +62,8 @@ const TopStories = ({ navigation }: { navigation: NavProps }) => {
     }
 
     const _renderStoriesList = () => {
-        if (topStories.init && topStories.stories.length == 0 && loading) {
+        const isShowIndicator = (topStories.init && topStories.stories.length == 0 && loading) || refreshing
+        if (isShowIndicator) {
             return <Indicator size="large" />
         } else {
             return <StoriesList
