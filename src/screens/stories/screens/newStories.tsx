@@ -1,7 +1,8 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavProps } from '..';
 import Indicator from '../../../components/indicator';
+import { Routes } from '../../../navigator/routers';
 import * as api from '../../../services/api';
 import { StoriesType, Story, StoryCategory } from '../../../types/story';
 import { LimitStories } from '../../../utils/constants';
@@ -10,6 +11,7 @@ import StoriesList from '../components/storiesList';
 const initNewStories: StoryCategory = {
     init: true,
     page: 1,
+    totalPages: 0,
     stories: []
 }
 const NewStories = ({ navigation }: { navigation: NavProps }) => {
@@ -18,17 +20,17 @@ const NewStories = ({ navigation }: { navigation: NavProps }) => {
     const [refreshing, setRefreshing] = useState(false)
 
     useEffect(() => {
-        getStories('new', 1, LimitStories)
+        _getStories('new', 1)
     }, [])
     
-
-    const getStories = async (type: StoriesType, page: number = 1, limit: number = LimitStories) => {
+    const _getStories = async (type: StoriesType, page: number = 1, limit: number = LimitStories) => {
         setLoading(true)
-        const stories = await api.getStories(type, page, limit)
+        const {stories, totalPages} = await api.getStories(type, page, limit)
         setNewStories(pre => {
             return {
                 init: false,
                 page: page,
+                totalPages: totalPages,
                 stories: [...pre.stories, ...stories]
             }
         })
@@ -36,23 +38,26 @@ const NewStories = ({ navigation }: { navigation: NavProps }) => {
         setRefreshing(false)
     }
 
-    const loadMore = () => {
-        const newPage = newStories.page + 1
-        getStories('new', newPage)
+    const _loadMore = () => {
+        if(newStories.page < newStories.totalPages) {
+            const nextPage = newStories.page + 1
+            _getStories('new', nextPage)
+        }
     }
 
-    const onRefresh = () => {
+    const _onRefresh = () => {
         setRefreshing(true)
         setNewStories({
             init: false,
             page: 1,
+            totalPages: 0,
             stories: []
         })
-        getStories('new', 1)
+        _getStories('new', 1)
     }
 
-    const handleOnPress = (item: Story) => {
-        navigation.navigate('StoryDetail', {story: item})
+    const _handleOnPress = (item: Story) => {
+        navigation.navigate(Routes.storyDetail, {story: item})
     }
 
     const renderStoriesList = () => {
@@ -63,21 +68,28 @@ const NewStories = ({ navigation }: { navigation: NavProps }) => {
             return <StoriesList 
                         data={newStories.stories} 
                         loading={loading} 
-                        loadMore={loadMore} 
-                        onRefresh={onRefresh} 
+                        loadMore={_loadMore} 
+                        onRefresh={_onRefresh} 
                         refreshing={refreshing}
-                        handleOnPress={handleOnPress}
+                        handleOnPress={_handleOnPress}
                         typeStory='new' />
         }
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.container}>
             {renderStoriesList()}
         </View>
     );
 };
 
-export default memo(NewStories);
+export default NewStories;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: '#fff', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    }
+});

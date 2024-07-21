@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Indicator from '../../../components/indicator'
 
@@ -10,7 +10,7 @@ const FooterComponent = () => {
     )
 }
 
-export default FooterComponent
+export default memo(FooterComponent)
 
 const styles = StyleSheet.create({
     container: {

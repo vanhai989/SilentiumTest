@@ -1,5 +1,5 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import React, { createContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { RootNavigationParamsList } from '../../navigator';
@@ -19,8 +19,6 @@ const initNavigationState: NavigationStateType[] = [
     { key: TabViewKeys.new_stories.key, title: TabViewKeys.new_stories.title },
 ]
 
-export const ThemeContext = createContext(null);
-
 const StoriesScreen = () => {
     const navigation = useNavigation<NavProps>();
     const [index, setIndex] = useState(0);
@@ -30,7 +28,7 @@ const StoriesScreen = () => {
         console.log('index', index);
     }, [index])
 
-    const renderScene = useMemo(() => {
+    const _renderScene = useMemo(() => {
         return SceneMap({
             [TabViewKeys.top_stories.key]: () => <TopStories navigation={navigation} />,
             [TabViewKeys.best_stories.key]: () => <BestStories navigation={navigation} />,
@@ -44,7 +42,7 @@ const StoriesScreen = () => {
                 <TabView
                     lazy={true}
                     navigationState={{ index, routes }}
-                    renderScene={renderScene}
+                    renderScene={_renderScene}
                     onIndexChange={setIndex}
                     initialLayout={{ width: layoutDimension.width }}
                     style={{flex: 1}}

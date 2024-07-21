@@ -14,24 +14,30 @@ type props = {
     handleOnPress: (story: Story) => void,
 }
 const StoriesList = ({ typeStory, data, loading, loadMore, onRefresh, refreshing, handleOnPress }: props) => {
-    const handleLoadMore = () => {
+    const _handleLoadMore = () => {
         loadMore()
     }
 
-    const renderItem = useCallback(({item}: {item: Story}) => <StoryItem item={item} handleOnPress={handleOnPress} />, [])
+    const _renderItem = useCallback(({item}: {item: Story}) => <StoryItem item={item} handleOnPress={handleOnPress} />, [])
 
     if (data.length == 0) {
         return null
     }
+
+  
     return (
         <View style={styles.container}>
             <FlatList
                 data={data}
-                renderItem={renderItem}
+                renderItem={_renderItem}
                 keyExtractor={(_, index) => index + typeStory}
-                onEndReached={handleLoadMore}
+                onEndReached={_handleLoadMore}
                 onRefresh={onRefresh}
                 refreshing={refreshing}
+                initialNumToRender={10}
+                maxToRenderPerBatch={10}
+                windowSize={15}
+                removeClippedSubviews={true}
                 onEndReachedThreshold={0.5}
                 ListFooterComponent={loading ? <FooterComponent /> : null}
             />

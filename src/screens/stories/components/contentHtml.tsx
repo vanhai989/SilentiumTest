@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { StyleSheet } from 'react-native'
 import RenderHTML from 'react-native-render-html'
 
@@ -15,6 +15,6 @@ const ContentHtml = ({ content }: { content: string | undefined }) => {
     />
 }
 
-export default ContentHtml
+export default memo(ContentHtml)
 
 const styles = StyleSheet.create({})

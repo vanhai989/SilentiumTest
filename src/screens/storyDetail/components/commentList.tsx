@@ -5,7 +5,7 @@ import CommentItem from './comment'
 
 const CommentList = ({ comments, isReply }: { comments: Story[], isReply: boolean }) => {
 
-    const renderItem = useCallback(({ item }: { item: Story }) => {
+    const _renderItem = useCallback(({ item }: { item: Story }) => {
         return <CommentItem comment={item} isReply={isReply} key={item.id} />
     }, [])
 
@@ -13,7 +13,7 @@ const CommentList = ({ comments, isReply }: { comments: Story[], isReply: boolea
         <FlatList
             scrollEnabled={false}
             data={comments}
-            renderItem={renderItem}
+            renderItem={_renderItem}
             keyExtractor={(_, index) => index.toString()}
         />
     )

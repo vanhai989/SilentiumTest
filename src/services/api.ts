@@ -18,20 +18,17 @@ export const getStory = async (id: number): Promise<Story> => {
   return story;
 };
 
-export const getStories = async (
-  type: StoriesType,
-  page: number = 1,
-  limit: number = 20
-): Promise<Story[]> => {
+export const getStories = async (type: StoriesType, page: number = 1, limit: number = 20): Promise<{ stories: Story[]; totalPages: number }> => {
   const storyIds = await getStoryIds(type);
+  const totalStories = storyIds.length;
+  const totalPages = Math.ceil(totalStories / limit);
   const paginatedIds = storyIds.slice((page - 1) * limit, page * limit);
-
   const stories = await Promise.all(
     paginatedIds.map(async (id) => {
       return getStory(id);
     })
   );
 
-  return stories;
+  return {stories, totalPages};
 };
 

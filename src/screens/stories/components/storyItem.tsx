@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Story } from '../../../types/story';
 import { portTimeFormat } from '../../../utils/common';
@@ -30,7 +30,7 @@ const StoryItem = ({ item, handleOnPress }: { item: Story, handleOnPress: (item:
     )
 }
 
-export default StoryItem
+export default memo(StoryItem)
 
 const styles = StyleSheet.create({
     itemContainer: {

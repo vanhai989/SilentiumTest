@@ -19,9 +19,9 @@ const StoryDetailScreen = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      const fetchStoryDetails = async () => {
+      const _fetchStoryDetails = async () => {
         try {
-          fetchComments();
+          _fetchComments();
         } catch (error: any) {
           if (error.name !== 'AbortError') {
             console.error('AbortError');
@@ -29,7 +29,7 @@ const StoryDetailScreen = () => {
         }
       };
 
-      fetchStoryDetails();
+      _fetchStoryDetails();
 
       return () => {
         fetchWrapper.abort();
@@ -37,7 +37,7 @@ const StoryDetailScreen = () => {
     }, [story.id])
   );
 
-  const fetchComments = async () => {
+  const _fetchComments = async () => {
     if (story.kids) {
       const fetchedComments = await Promise.all(
         story.kids.map((commentId) => getStory(commentId))
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   container: {
-    padding: 15,
+    padding: 10,
   },
   title: {
     fontSize: 24,

@@ -20,6 +20,7 @@ export interface Story {
 export type StoryCategory = {
     init: boolean;
     page: number,
+    totalPages: number,
     stories: Story[];
   }
   

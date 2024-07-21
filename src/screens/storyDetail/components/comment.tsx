@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Indicator from '../../../components/indicator';
 import { getStory } from '../../../services/api';
@@ -78,8 +78,9 @@ const CommentItem = ({ comment, isReply }: {comment: Story, isReply: boolean}) =
       marginLeft: 10,
     },
     commentAuthor: {
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: 'bold',
+      marginBottom: 5,
     },
     commentText: {
       fontSize: 14,
@@ -89,4 +90,4 @@ const CommentItem = ({ comment, isReply }: {comment: Story, isReply: boolean}) =
     },
   });
 
-  export default CommentItem;
+  export default memo(CommentItem);
