@@ -1,5 +1,3 @@
-In this project, I aimed to create the twitter clone project to further improve my react native knowledge.
-
 ## Used Packages
 
 - react-native-tab-view
