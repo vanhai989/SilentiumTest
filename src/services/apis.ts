@@ -1,4 +1,4 @@
-import { StoriesType, Story } from '../types/story';
+import { Comment, StoriesType, Story } from '../types/story';
 
 import { BASE_URL } from "../utils/constants";
 import fetchWrapper from "./baseApi";
@@ -22,8 +22,6 @@ export const getStories = async (type: StoriesType, page: number = 1, limit: num
   const storyIds = await getStoryIds(type);
   const totalStories = storyIds.length;
   const totalPages = Math.ceil(totalStories / limit);
-  console.log('totalPages', totalPages);
-  
   const paginatedIds = storyIds.slice((page - 1) * limit, page * limit);
   const stories = await Promise.all(
     paginatedIds.map(async (id) => {
@@ -34,3 +32,7 @@ export const getStories = async (type: StoriesType, page: number = 1, limit: num
   return {stories, totalPages};
 };
 
+export const getComments = async (id: number): Promise<Comment> => {
+  const story = await fetchWrapper.fetch<Comment>(`${BASE_URL}item/${id}.json`);
+  return story;
+};

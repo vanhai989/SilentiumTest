@@ -10,7 +10,7 @@ class FetchWrapper {
   }
 
   async fetch<T>(url: string): Promise<T> {
-    console.log(`url: ${url}`); 
+    // console.log(`url: ${url}`); 
     const response = await fetch(url, { signal: this.signal });
     if (!response.ok) {
       throw new Error('Network response was not ok');

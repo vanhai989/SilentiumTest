@@ -7,7 +7,17 @@ export interface Story {
   time: number;
   url?: string;
   kids?: number[];
-  type: 'story' | 'comment';
+  type: 'story';
+}
+
+export interface Comment {
+  id: number;
+  by: string;
+  kids?: number[];
+  parent?: string;
+  text?: string;
+  time: number;
+  type: 'comment';
 }
 
   export type StoriesType = 'top' | 'new' | 'best'

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
-import { Story } from '../../../types/story'
+import { Comment } from '../../../types/story'
 import CommentItem from './comment'
 
-const CommentList = ({ comments, isReply }: { comments: Story[], isReply: boolean }) => {
+const CommentList = ({ comments, isReply }: { comments: Comment[], isReply: boolean }) => {
 
-    const _renderItem = useCallback(({ item }: { item: Story }) => {
+    const _renderItem = useCallback(({ item }: { item: Comment }) => {
         return <CommentItem comment={item} isReply={isReply} key={item.id} />
     }, [])
 

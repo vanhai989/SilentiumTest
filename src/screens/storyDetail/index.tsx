@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Indicator from '../../components/indicator';
 import { RootNavigationParamsList } from '../../navigator';
-import { getStory } from '../../services/apis';
+import { getComments } from '../../services/apis';
 import fetchWrapper from '../../services/baseApi';
-import { Story } from '../../types/story';
+import { Comment } from '../../types/story';
 import { formatTimeLocale } from '../../utils/common';
 import ContentHtml from '../stories/components/contentHtml';
 import CommentList from './components/commentList';
@@ -15,7 +15,7 @@ type RouteProps = RouteProp<RootNavigationParamsList, 'StoryDetail'>;
 const StoryDetailScreen = () => {
   const route = useRoute<RouteProps>();
   const { story } = route.params;
-  const [comments, setComments] = useState<Story[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -40,7 +40,7 @@ const StoryDetailScreen = () => {
   const _fetchComments = async () => {
     if (story.kids) {
       const fetchedComments = await Promise.all(
-        story.kids.map((commentId) => getStory(commentId))
+        story.kids.map((commentId) => getComments(commentId))
       );
       setComments(fetchedComments);
     }

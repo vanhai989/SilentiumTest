@@ -1,13 +1,13 @@
 import React, { memo, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Indicator from '../../../components/indicator';
-import { getStory } from '../../../services/apis';
-import { Story } from '../../../types/story';
+import { getComments } from '../../../services/apis';
+import { Comment } from '../../../types/story';
 import ContentHtml from '../../stories/components/contentHtml';
 import CommentList from './commentList';
 
-const CommentItem = ({ comment, isReply }: {comment: Story, isReply: boolean}) => {
-    const [replies, setReplies] = useState<Story[]>([]);
+const CommentItem = ({ comment, isReply }: {comment: Comment, isReply: boolean}) => {
+    const [replies, setReplies] = useState<Comment[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
   
     useEffect(() => {
@@ -17,7 +17,7 @@ const CommentItem = ({ comment, isReply }: {comment: Story, isReply: boolean}) =
     const fetchReplies = async () => {
       if (comment.kids) {
         const fetchedReplies = await Promise.all(
-          comment.kids.map((replyId) => getStory(replyId))
+          comment.kids.map((replyId) => getComments(replyId))
         );
         setReplies(fetchedReplies);
       }
