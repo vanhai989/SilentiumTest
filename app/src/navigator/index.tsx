@@ -5,10 +5,11 @@ import { Routes } from './routers';
 import StoriesScreen from '../screens/stories';
 import StoryScreen from '../screens/storyDetail';
 import StoryDetailScreen from '../screens/storyDetail';
+import { Story } from '../types/story';
 
 export type RootNavigationParamsList = {
   [Routes.stories]: undefined; 
-  [Routes.storyDetail]: { storyId: number };
+  [Routes.storyDetail]: { story: Story };
 };
 
 const Stack = createNativeStackNavigator<RootNavigationParamsList>();
@@ -26,11 +27,9 @@ function AppRoute() {
             headerStyle: {
               backgroundColor: '#2196f3',
           },
-          headerTintColor: '#d1e9fd',
+          headerTintColor: '#f1f9ff',
           headerTitle: 'Story Detail',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
+          headerBackTitle: ''
             }} />
       </Stack.Navigator>
     </NavigationContainer>

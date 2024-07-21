@@ -1,46 +1,54 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { Story, StoryCategory } from '../../../types/story'
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useCallback } from 'react'
+import { FlashList } from "@shopify/flash-list";
+import { StoriesType, Story, StoryCategory } from '../../../types/story'
 import { NavProps } from '..';
 import { Routes } from '../../../navigator/routers';
+import RenderHTML from 'react-native-render-html';
+import StoryItem from './storyItem';
+import FooterComponent from './footerComponent';
 
-let page = 1
-let limit = 30
-const StoriesList= ({navigation, data, getStories}: {navigation: NavProps, data: StoryCategory, getStories: any}) => {
+const itemHeight = 200
+type props = {
+    typeStory: StoriesType,
+    data: Story[],
+    loadMore: () => void,
+    onRefresh: () => void,
+    loading: boolean,
+    refreshing: boolean,
+    handleOnPress: (story: Story) => void,
+}
+const StoriesList = ({ typeStory, data, loading, loadMore, onRefresh, refreshing, handleOnPress }: props) => {
     const handleLoadMore = () => {
-        page += 1
-        getStories('new', page, limit)
+        loadMore()
     }
 
-    const renderItem = ({item, index}: {item: Story, index: number}) => {
+    const renderItem = useCallback(({item}: {item: Story}) => <StoryItem item={item} handleOnPress={handleOnPress} />, [])
 
-        const handleOnPress = () => {
-            navigation.navigate(Routes.storyDetail, {storyId: item.id})
-        }
-       
-        return (
-            <TouchableOpacity onPress={handleOnPress} style={styles.itemContainer} key={index}>
-                <Text>title: {item.title}</Text>
-                <Text>text: {item.text}</Text>
-            </TouchableOpacity>
-        )
+    if (data.length == 0) {
+        return null
     }
-  return (
-    <FlatList
-        data={data.stories}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => item.id.toString()}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
-    />
-  )
+    return (
+        <View style={styles.container}>
+            <FlatList
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(_, index) => index + typeStory}
+                onEndReached={handleLoadMore}
+                onRefresh={onRefresh}
+                refreshing={refreshing}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={loading ? <FooterComponent /> : null}
+            />
+        </View>
+    )
 }
 
 export default StoriesList
 
 const styles = StyleSheet.create({
-    itemContainer: {
-        flex: 1,
-        padding: 10,
-    }
+    container: {
+        height: '100%',
+        width: '100%'
+    },
 })

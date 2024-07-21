@@ -1,3 +1,5 @@
+import { Dimensions } from "react-native";
+
 export const BASE_URL = 'https://hacker-news.firebaseio.com/v0';
 
 

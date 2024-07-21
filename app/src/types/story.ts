@@ -1,9 +1,14 @@
 export interface Story {
-    id: number;
-    title: string;
-    text: string;
-    kids: number[];
-  }
+  id: number;
+  title: string;
+  text?: string;
+  by: string;
+  score: number;
+  time: number;
+  url?: string;
+  kids?: number[];
+  type: 'story' | 'comment';
+}
 
   export type StoriesType = 'top' | 'new' | 'best'
 
@@ -14,6 +19,7 @@ export interface Story {
 
 export type StoryCategory = {
     init: boolean;
+    page: number,
     stories: Story[];
   }
   
