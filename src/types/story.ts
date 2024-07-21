@@ -14,7 +14,7 @@ export interface Comment {
   id: number;
   by: string;
   kids?: number[];
-  parent?: string;
+  parent?: number;
   text?: string;
   time: number;
   type: 'comment';

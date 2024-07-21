@@ -40,6 +40,7 @@ const StoriesScreen = () => {
         <View style={styles.container}>
             <View style={styles.tabViewWrapper}>
                 <TabView
+                    testID="tab-view"
                     lazy={true}
                     navigationState={{ index, routes }}
                     renderScene={_renderScene}
